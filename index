@@ -1,0 +1,777 @@
+const Discord = require("discord.js");
+const client = new Discord.Client();
+const config = require("./config.json");
+const dgestor = require('discord-gestor');
+
+client.login(config.token);
+
+let prefix = config.prefix;
+
+
+client.on("guildMemberAdd", (member) => {
+    let canal = client.channels.get('476919808508821514');
+    canal.send(`Hola ${member.user}, bienvenido al server ${member.guild.name} pasala bien!.`);
+
+});
+
+client.on("guildMemberRemove", (member) => {
+    let canal = client.channels.get('561575685508825119');
+    canal.send(`${member.user}, a dejado el servidor.`);
+
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+
+
+client.on("ready", () => {
+  client.user.setPresence({
+       status: "online",
+       game: {
+           name: " leer mangas GB | crater",
+           type: "PLAYING"
+       }
+   });
+   console.log(`Estoy listo!,
+            conectado en ${client.guilds.size} servidores y  ${client.users.size} usuarios.`);
+            let canal = client.channels.get('561040429009731609');
+            canal.send(`GB BOT hacido actualisada`);
+});
+//////////////////////////comandos/////////////////////////////////
+client.on("message", (message) => {
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+
+
+
+/////////////////////////////////////////comndo kick////////////////////////////
+if(command === 'kick'){
+  let mencionado = message.mentions.users.first();
+let razon = args.slice(1).join(' ');
+let permiso = message.member.hasPermission("KICK_MEMBERS");
+
+if(!permiso){
+    message.channel.send('No tiene el permiso de kickear');return;
+} else{
+    message.channel.send('Si tiene el permiso de Kickear');
+}
+if(!mencionado) return message.reply('No ha mencionando a ningún miembro.');
+if(!razon) return message.channel.send('Escriba una razón del uso de kick.');
+
+message.guild.member(mencionado).kick(razon);
+message.channel.send(`**${mencionado.username}**, fue pateado del servidor, razón: ${razon}.`);
+}
+
+
+////////////////////////////////////////fin del comando, continuan los otros////////////////////////
+
+
+if(command === ('info')){
+  let nombre = args[0];
+  let edad = args[1];
+  let color = args[2];
+  message.channel.send(`Hola ${nombre}, tienes ${edad} años y te gusta el color ${color}.`);
+
+
+}
+
+
+if(command === 'hola'){
+  var rpts = ["holaaaa!", "hola, como estas?", "hola, que haces?", "hola, espero que estes disfrutando del servidor"];
+
+  message.channel.send(rpts[Math.floor(Math.random() * rpts.length)]);
+    if (!message.content.startsWith(prefix)) return;
+    if (message.author.bot) return;
+  }
+
+  if(command === 'verdadgbbot'){
+      message.channel.send("sip");
+      if (!message.content.startsWith(prefix)) return;
+      if (message.author.bot) return;
+    }
+    if(command === 'gbbot-dialgo'){
+      var rpts = ["holaaaa!", "Nel >>:v", "Tal vez", "¡Claro!", "Nel >>:v"];
+
+      message.channel.send(rpts[Math.floor(Math.random() * rpts.length)]);
+        if (!message.content.startsWith(prefix)) return;
+        if (message.author.bot) return;
+      }
+
+  if(command === 'bien-y-tu?'){
+      message.channel.send("genial");
+      if (!message.content.startsWith(prefix)) return;
+      if (message.author.bot) return;
+    }
+
+  /////////////////////////////////avatar////////////////////////////
+
+if(command === 'avatar'){
+  let img = message.mentions.users.first()
+  if (!img) {
+      const embed = new Discord.RichEmbed()
+      .setImage(`${message.author.displayAvatarURL}`)
+      .setColor(0xff1444)
+      .setFooter(`Avatar de ${message.author.username}#${message.author.discriminator}`);
+      message.channel.send({ embed });
+  } else {
+      const embed = new Discord.RichEmbed()
+      .setImage(`${img.displayAvatarURL}`)
+      .setColor(0xff1444)
+      .setFooter(`Avatar de ${img.username}#${img.discriminator}`);
+      message.channel.send({ embed });
+
+  }};
+
+///////////////////////////////datos//////////////////////////////////////////
+
+if(command === 'datos'){
+  const moment = require("moment");
+require('moment-duration-format');
+
+const actividad = moment.duration(client.uptime).format(" D [dias], H [hrs], m [mins], s [secs]");
+
+
+const embed = new Discord.RichEmbed()
+.setColor(0x66ff66)
+
+.setAuthor(`Bot info`, client.user.avatarURL)
+.addField(`creador del bot`, `joita`, true)
+.addField(`Version`, `1.0.0`, true)
+.addField(`Libreria`, `Discord ^11.2.1 (Js)`, true)
+
+.addField(`Memoria`, `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`, true)
+.addField(`Uptime`, `${actividad}`, true)
+.addField(`Servidores`, `${client.guilds.size.toLocaleString()}`, true)
+
+.addField(`Usuarios`, `${client.users.size.toLocaleString()}`, true)
+.addField(`Canales`, `${client.channels.size.toLocaleString()}`, true)
+.addField(`Conexiones a voz`, `${client.voiceConnections.size}`, true)
+
+message.channel.send(embed);
+}
+///////////////////////////////////embled////////////////////////////
+if(message.content.startsWith(prefix + "embled")) {
+  const embed = new Discord.RichEmbed()
+    .setTitle("Este es su título, puede contener 256 caracteres")
+    .setAuthor(message.author.username, message.author.avatarURL)
+    .setColor(0x00AE86)
+    .setDescription("Este es el cuerpo principal del texto, puede contener 2048 caracteres.")
+    .setFooter("Pie de página, puede contener 1024 caracteres", client.user.avatarURL)
+    .setImage(message.author.avatarURL)
+    .setThumbnail(message.author.avatarURL)
+    .setTimestamp()
+    .setURL("https://github.com/CraterMaik")
+    .addField("Este es un título de campo", "Este es un valor de campo puede contener 1024 caracteres.")
+    .addField("Campo en línea", "Debajo del campo en línea",  true)
+    .addBlankField(true)
+    .addField("Campo en línea 3", "Puede tener un máximo de 25 campos.", true);
+
+message.channel.send({embed});
+}
+
+///////////////////////////////ping normal/////////////////////////////////////
+if(message.content.startsWith(prefix + 'ping')){
+
+  let ping = Math.floor(message.client.ping);
+message.channel.send(":ping_pong: Pong!, "+ ping + "ms");
+}
+
+////////////////////////////\server/\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+if(command === 'server'){
+  var server = message.guild;
+
+const embed = new Discord.RichEmbed()
+    .setThumbnail(server.iconURL)
+    .setAuthor(server.name, server.iconURL)
+    .addField('ID', server.id, true)
+    .addField('Region', server.region, true)
+    .addField('Creado el', server.joinedAt.toDateString(), true)
+    .addField('Dueño del Servidor (el jefesito)', server.owner.user.tag +'('+server.owner.user.id +')', true)
+    .addField('Miembros', server.memberCount, true)
+    .addField('Roles', server.roles.size, true)
+    .setColor(0x66b3ff)
+
+message.channel.send({ embed });
+
+
+}
+
+///////////////////////////////ban////////////////////////////////////////////
+if(command === 'ban'){
+  let mencionado = message.mentions.users.first();
+let razon = args.slice(1).join(' ');
+let permiso = message.member.hasPermission("BAN_MEMBERS");
+
+if(!permiso){
+    message.channel.send('No tiene el permiso de kickear');return;
+} else{
+    message.channel.send('Si tiene el permiso de Kickear');
+}
+if(!mencionado) return message.reply('No ha mencionando a ningún miembro.');
+if(!razon) return message.channel.send('Escriba una razón del uso de ban.');
+
+message.guild.member(mencionado).ban(razon);
+message.channel.send(`**${mencionado.username}**, fue baneado del servidor, razón: ${razon}.`);
+
+}
+
+/////////////////////////purge//////////////////////////////////////////////////
+if(command === 'purge'){
+  let cantidad = parseInt(args[0]);
+message.channel.bulkDelete(cantidad);
+}
+
+////////////////////////////////////////mensaje privados///////////////////////
+if(command === 'mensagepriv'){
+  let mensaje = args.join(" ");
+
+if(!mensaje) return message.channel.send(`Escriba un mensaje para enviartelo por privados.`);
+message.author.send(mensaje);
+}
+////////////////////////////help/////////////////////////////////////////////////
+if(command === 'help1'){
+
+  message.channel.send('**'+message.author.username+'**, Revisa tus mensajes privados.');
+
+const embed = new Discord.RichEmbed()
+    .setAuthor(message.author.username, message.author.avatarURL)
+    .addField('ping', 'Compueba la latencia del BOT')
+    .addField('avatar', 'Muestra el avatar de un usuario')
+    .addField('server', 'Muestra información de un servidor',)
+    .addField('ban', 'Banear a un usuario del servidor incluye razon.' )
+    .addField('Kick', 'Patear a un usuario del servidor incluye razon.')
+    .addField('purge', 'elimina mensajes')
+    .addField('embled', 'muestra el embled del bot')
+    .addField('help1', 'te dise los comandos de la fila 1 que tiene el bot')
+    .addField('```Canal de Voz```', ' info de los canales de voz')
+    .addField('join', 'entra al canal de voz')
+    .addField('leave', 'sale del canal de voz')
+    .addField('poner', 'pone musicapero nesesitas poner la URL de youtube')
+    .addField('```Random```', 'imagenes random')
+    .addField('neko', 'imagenes de chicas neko')
+    .addField('```otras cosas```', 'son otro tipos de comandos')
+    .addField('info', 'este namas es como un tipo juego')
+    .addField('datos', 'te disela info del bot')
+    .addField('help2', 'es la parte 2 de los comandos')
+
+
+
+    .setFooter("Version 1.30", client.user.avatarURL)
+    .setColor(0x66b3ff)
+
+message.author.send({ embed });
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+if(command === 'help2'){
+
+  message.channel.send('**'+message.author.username+'**, Revisa tus mensajes privados.');
+
+const embed = new Discord.RichEmbed()
+    .setAuthor(message.author.username, message.author.avatarURL)
+
+    .addField('mensagepriv', 'GBBot envia un mensage aquien quieras con la info que quieras')
+    .addField('8ball', 'funciona como el juego de 8ball')
+    .addField('love', 'te dise cuanta conpatibilidad tienes con alguien')
+    .addField('pescar', 'pesca peses')
+    .addField('encuesta', 'con este puedes hacer encuestas')
+    .addField('gbbot-di = gbbot di', 'repite lo que le escribas')
+    .addField('rifa', 'con este puedes hacer rifas')
+    .addField('usuario', 'te muestra la info de tu usuario o el que mensiones')
+    .addField('a-dormir = a dormir', 'duerme al bot')
+
+
+    .setFooter("Version 1.30", client.user.avatarURL)
+    .setColor(0x66b3ff)
+
+message.author.send({ embed });
+}
+////////////////////////////////////////////8 ball
+if(command === '8ball'){
+  var rpts = ["Sí", "No", "Tal vez", "No sé", "¡Claro!"];
+
+  if (!args.join(' ')) return message.reply(`Escriba una pregunta.`);
+  message.channel.send(message.member.user+' a su pregunta `'+args.join(' ')+'` mi respuesta es: `'+ rpts[Math.floor(Math.random() * rpts.length)]+'`');
+}
+/////////////////////////////////////calculador de amor/////////////////////////
+if(command === 'love'){
+  let users = message.mentions.users.map(m => m.username).join(' y ');
+  if(!users) return message.channel.send('Mencione a dos usuarios para calcular');
+
+  const random = Math.floor(Math.random() * 100);
+  let heard = "";
+
+      if(random < 50){
+          heard=':broken_heart:';
+
+      }else if(random < 80){
+          heard=':sparkling_heart: ';
+
+      }else if(random < 101){
+          heard=':heart:';
+
+      }
+
+  const embed = new Discord.RichEmbed()
+      .setAuthor('El porcentaje de amor de '+users+' es:')
+      .setDescription(heard+' **'+random+' %**'+' '+heard)
+      .setColor(0xff4d4d)
+
+  message.channel.send(embed);
+}
+//////////////////////////////////random dog/////////////////////
+if(command === 'dogs'){
+  const got = require('got');
+
+got('https://random.dog/woof.json').then(res=>{
+
+    message.channel.send(JSON.parse(res.body).url);
+
+});
+}
+
+//////////////////////////////////////////////////archivos random////////////////////////////
+if(command === 'neko'){
+  let elementos = ['https://i.pinimg.com/originals/0d/7f/bc/0d7fbc29be6cfae1bf41cc30f068e3e3.jpg','https://i.imgur.com/0WTzTvi.jpg','http://images6.fanpop.com/image/polls/1220000/1220106_1369050695308_full.jpg','https://i.pinimg.com/736x/76/05/fd/7605fdbc4c8bb958e9fc64e64e5c64f5--monster-girl-chicas-anime.jpg','https://wallup.net/wp-content/uploads/2016/05/14/64335-Chocolat_Neko_Para-anime_girls-animal_ears-cat_ears-nekomimi-Neko_Works-Neko_Para-visual_novel.jpg','https://pbs.twimg.com/profile_images/607711721508237313/ocX1i7X7.jpg','https://data.whicdn.com/images/202489724/large.png','https://i.pinimg.com/originals/4f/5f/e2/4f5fe2ce8ed7b0079a32bd0cbac4d8c4.jpg','https://cdn.weeb.sh/images/Hk5vhAuPb.jpeg','https://cdn.weeb.sh/images/rknvhAdwZ.png','https://cdn.weeb.sh/images/SyepMhCuDZ.jpeg', 'https://cdn.weeb.sh/images/SJlKbnAdPZ.jpeg','https://cdn.weeb.sh/images/B1Nw20_w-.jpeg','https://cdn.weeb.sh/images/SkaI30dwW.png','https://cdn.weeb.sh/images/HyzSn0OP-.png'];
+let captura = elementos[Math.floor(elementos.length * Math.random())];
+
+message.channel.send({files: [captura]});
+}
+if(command === 'trap'){
+  let elementos = ['URL1','URL2','URL3','URL4','URL5'];
+  let captura = elementos[Math.floor(elementos.length * Math.random())];
+
+  message.channel.send({files: [captura]});
+}
+/////////////////////////////////pescar//////////////////////////////
+if(command === 'pescar'){
+  let rollfish = Math.floor(Math.random() * 7) +1;
+if(rollfish === 1){
+    message.channel.send('Felicitaciones, ' + message.author.username + '! pescaste:1 :tropical_fish:');
+
+}else if(rollfish === 7){
+    message.channel.send('Felicitaciones, ' + message.author.username + '! pescaste:5 :fish:');
+
+}else {
+
+    message.channel.send('Felicitaciones, ' + message.author.username + '! pescaste: 2:shopping_cart:');
+}
+}
+///////////////////////////////////////////encuesta////////////////////////////////////////////////
+if(command === 'encuesta'){
+  if(!args.join(' ')) return message.channel.send('Agrege una pregunta para la encuesta.')
+
+  const embed = new Discord.RichEmbed()
+        .setAuthor('Pregunta:')
+        .setDescription('**'+args.join(' ')+'**\n▔▔▔▔▔▔▔▔▔▔▔')
+        .addField('Opcion 1', '1\u20e3 Si')
+        .addField('Opcion 2', '2\u20e3 No')
+        .setColor(0xff4d4d)
+        .setTimestamp()
+
+  message.channel.send(embed)
+  .then(m => {
+          m.react("1\u20e3");
+          m.react("2\u20e3");
+
+  });
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+if(command === "join"){
+let Canalvoz = message.member.voiceChannel;
+
+if(!Canalvoz || Canalvoz.type !== 'voice') {
+    message.channel.send('¡Necesitas unirte a un canal de voz primero!.');
+
+} else if (message.guild.voiceConnection) {
+    message.channel.send('Ya estoy conectado en un canal de voz.');
+
+} else {
+    message.channel.send('Conectando...').then(m => {
+        Canalvoz.join().then(() => {
+            m.edit('Conectado exitosamente.').catch(error => console.log(error));
+
+        }).catch(error => console.log(error));
+
+    }).catch(error => console.log(error));
+
+};
+}
+/////////////////////////////////////////salida del bot del canal de voz////////
+if(command === 'leave'){
+let Canalvoz = message.member.voiceChannel;
+
+if(!Canalvoz) {
+    message.channel.send('No estas conectado a un canal de voz.');
+
+} else {
+    message.channel.send('Dejando el canal de voz.').then(() => {
+        Canalvoz.leave();
+
+    }).catch(error => console.log(error));
+
+}}
+//////////////////////////////////////////////////////////////////////
+if(command === 'poner'){
+  const ytdl = require('ytdl-core');
+
+let Canalvoz = message.member.voiceChannel;
+
+if(!Canalvoz) return message.channel.send('¡Necesitas unirte a un canal de voz primero!.');
+if(!args.join("  ")) return message.channel.send('Ingrese un enlace de youtube para poder reproducirlo.');
+
+Canalvoz.join()
+    .then(connection => {
+        const url = ytdl(args.join(' '), { filter : 'audioonly' });
+        const dispatcher = connection.playStream(url);
+
+        message.delete();
+        message.channel.send('Reproduciendo ahora: '+ args.join("  "));
+
+    }).catch(console.error);
+
+
+}
+//////////////////////////////////////////////////////////////////////
+if(command === 'galleta'){
+  let user = message.mentions.users.first();
+  let razon = args.split(' ').slice(1).join(' ');
+
+  if(!user) return message.channel.send('Mencione a un usuario.');
+
+  if(!razon){
+    razon ='Ninguno';
+
+  }
+  message.channel.send('**'+ user.username +',** tienes una :cookie: de **'+message.author.username+'**\n\n**Razón:** '+razon+'\n(づ｡◕‿‿◕｡)づ:･ﾟ✧ :cookie:');
+}
+/////////////////////////////////////////////////////////////////////////////////////
+if(command === 'gbbot-di'){
+  if(!args.join(" ")) return message.channel.send(`debe escribir un mensaje a enviar.`);
+  message.channel.send(args.join(" "));
+}
+////////////////////////////////////////////////////////////////
+if(command === "3"){
+const nuevoTitulo = args.join(" ")
+
+dgestor.perfil.editInfo(message.author, nuevoTitulo, (resp) => {
+if(resp) {
+message.channel.send("Titulo editado!")
+}
+});
+}
+//////////////////////////////spoilers//////////////////////////////////
+if(command === 'oka'){
+  let elementos = ['recuerda camiar los \ por / '];
+  let captura = elementos[Math.floor(elementos.length * Math.random())];
+
+  message.channel.send({files: [captura]});
+  message.channel.send("@everyone");
+  message.channel.send("espera 10 segundos");
+}
+////////////////////////////////spoilers///////////////////////////////////////
+if(command === '11712'){
+    message.channel.send(".oka");
+    if (!message.content.startsWith(prefix)) return;
+
+}
+if(command === 'hola gbbot'){
+    message.channel.send("hola, como estas?");
+    if (!message.content.startsWith(prefix)) return;
+    if (message.author.bot) return;
+  }
+
+  if(command === '10'){
+    let permiso = message.member.hasPermission("SEND_MESSAGES");
+if(!permiso){
+    message.channel.send('No tiene el permiso de Administrador');
+} else{
+    message.channel.send('Si tiene el permiso de Administrador');
+}
+      message.channel.send("ok hola :grinning:");
+      if (!message.content.startsWith(prefix)) return;
+      if (message.author.bot) return;
+    }
+
+/////////////////////////////./////////////////////////////////////////////
+if(command === '555'){
+var search = require('youtube-search');
+
+let Canalvoz = message.member.voiceChannel;
+
+if(!Canalvoz) return message.channel.send('¡Necesitas unirte a un canal de voz primero!.');
+
+var opts = {
+  maxResults: 1,
+  key: 'AIzaSyCfLDEwhCtBCEQngRHDO4D1BdCPMuBgMJQ'
+};
+
+search(args.join(' '), opts, function(err, results) {
+  if(err) return console.log(err);
+
+  Canalvoz.join()
+      .then(connection => {
+          const url = ytdl(args.join(' '), { filter : 'audioonly' });
+          const dispatcher = connection.playStream(url);
+
+          message.delete();
+          message.channel.send('Reproduciendo ahora: '+ args.join("  "));
+
+      }).catch(console.error);
+
+    console.dir(results);
+});
+}
+///////////////////////////////////////////////////////////////////
+if(command === '1'){
+  let elementos = ['F:/GB scan/atari nikki-onnanoko ni nacchau hanashi/cap 3/1.jpg'];
+  let captura = elementos[Math.floor(elementos.length * Math.random())];
+
+  message.channel.send({files: [captura]});
+}
+///////////////////////////////////////rifa/////////////////////////////////
+if(command === 'rifa'){
+
+
+  let roll = message.content.split(' ').slice(1);
+  if(roll < 0) return message.reply(`escriba un número entre 1 y 100!`);
+  if(roll > 100) return message.reply(`escriba un número entre 1 y 100!`);
+
+  let randomroll  = Math.floor(Math.random() * roll) + 1;
+  let random = Math.floor(Math.random() * 100) + 1;
+
+  if(!roll[0]){
+      message.channel.send('Del 1 al 100 GBBot dice : '+random)
+
+  }else{
+      message.channel.send('Del 1 al '+roll+' la maquina saco: '+randomroll)
+
+  }
+}
+/////////////////////////////////////////////////////////////////////////////////
+if(command === 'usuario'){
+  let userm = message.mentions.users.first()
+
+  if(!userm){
+    var user = message.author;
+
+    const embed = new Discord.RichEmbed()
+      .setThumbnail(user.avatarURL)
+      .setAuthor(user.username+'#'+user.discriminator, user.avatarURL)
+      .addField('Jugando a', user.presence.game != null ? user.presence.game.name : "Nada", true)
+      .addField('ID', user.id, true)
+      .addField('Estado', user.presence.status, true)
+      .addField('Apodo', message.member.nickname, true)
+      .addField('Cuenta Creada', user.createdAt.toDateString(), true)
+      .addField('Fecha de Ingreso', message.member.joinedAt.toDateString())
+      .addField('Roles', message.member.roles.map(roles => `\`${roles.name}\``).join(', '))
+      .setColor(0x66b3ff)
+
+    message.channel.send(embed);
+
+  }else{
+    const embed = new Discord.RichEmbed()
+      .setThumbnail(userm.avatarURL)
+      .setAuthor(userm.username+'#'+userm.discriminator, userm.avatarURL)
+      .addField('Jugando a', userm.presence.game != null ? userm.presence.game.name : "Nada", true)
+      .addField('ID', userm.id, true)
+      .addField('Estado', userm.presence.status, true)
+      .addField('Cuenta Creada', userm.createdAt.toDateString(), true)
+      .setColor(0x66b3ff)
+
+    message.channel.send(embed);
+
+  }
+
+}
+////////////////////////dormir///////
+if(command === 'a-dormir'){
+
+  let permiso = message.member.hasPermission("SEND_MESSAGES");
+if(!permiso){
+  message.channel.send('No tiene el permiso de Administrador');
+} else{
+  message.channel.send('Si tiene el permiso de Administrador');
+}
+  message.channel.send("`Durmiendo..`").then(() => {
+    client.destroy().then(() => {
+        process.exit();
+    });
+});
+}
+////////////////////////////////////////////onii//////////////////////////////////
+if(command === 'encuesta-onii'){
+  if(!args.join(' ')) return message.channel.send('Agrege una pregunta para la encuesta.')
+
+  const embed = new Discord.RichEmbed()
+        .setAuthor('Pregunta:')
+        .setDescription('**'+args.join(' ')+'**\n▔▔▔▔▔▔▔▔▔▔▔')
+        .addField('Portada', '1\u20e3 Portada')
+        .addField('Pag 1', '2\u20e3 pag 1')
+        .addField('Ultima Pag', '3\u20e3 ultima pag')
+        .setColor(0xff4d4d)
+        .setTimestamp()
+
+  message.channel.send(embed)
+  .then(m => {
+          m.react("1\u20e3");
+          m.react("2\u20e3");
+          m.react("3\u20e3");
+
+  });
+}
+///////////////////////////////////////////
+if(command  === 'rank'){
+
+  const dgestor = require('discord-gestor');
+  let idu = message.author.id;
+  dgestor.perfil.verPerfil(idu, (datos) => {
+    console.log(datos.nivel, datos.puntos, datos.id);
+});
+dgestor.economia.verMonedas(idu, (monedas) => {
+    console.log(monedas.cantidad)
+});
+
+}
+///////////////////////////////////////////////////////////////////////////////////
+if(command === "mirank"){
+
+  const dgestor = require('discord-gestor');
+  let idu = message.author.id;
+  dgestor.perfil.verPerfil(idu, (datos) => {
+    message.channel.send('Tienes: '+ datos.puntos + ' puntos.');
+    message.channel.send('Nivel: ' + datos.nivel);
+    message.channel.send('Porcentaje al siguiente nivel: '+ datos.porcNivel +'%');
+
+});
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+if(command === 'fondo'){
+
+  const dgestor = require('discord-gestor');
+  let idu = message.author.id;
+  dgestor.perfil.verFondos(idu, (fondos) => {
+    message.channel.send('Fondo principal: '+ fondos.fonPrincipal);
+
+  });
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+if(command === 'reputacion'){
+
+  const dgestor = require('discord-gestor');
+  let idu = message.author.id;
+  dgestor.perfil.verReputacion(idu, (reps) => {
+      console.log('Tengo: '+ reps.cantidad + 'de reputación.');
+
+  });
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
+if(command === 'top'){
+
+    const dgestor = require('discord-gestor');
+  dgestor.perfil.verTop('nivel', 5, (lista) => {
+	console.log(lista);
+  message.channel.send('TOP 5:')
+	message.channel.send('Nivel: '+ lista.nivel +' Puntos: '+ lista.puntos)
+
+});
+
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
+if(command === 'cambiar imagen'){
+
+const dgestor = require('discord-gestor');
+let idu = message.author.id;
+
+  let nuevoFondo = 'https://i.pinimg.com/originals/0d/7f/bc/0d7fbc29be6cfae1bf41cc30f068e3e3.jpg';
+  dgestor.perfil.editFondo(idu, nuevoFondo, (resp) =>{
+      if(resp) {
+  		message.channel.send('Tu fondo de perfil fue editado correctamente.');
+  	}
+  });
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+    const dgestor = require('discord-gestor');
+      let idu = message.author.id;
+
+    dgestor.perfil.editPuntos(idu, 2, (resp, nNivel) => {
+    if(resp) {
+        message.channel.send('Felicidades subiste al nivel: '+ nNivel);
+    }
+
+});
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+if(command === '44'){
+  const dgestor = require('discord-gestor');
+  let idu = message.author.id;
+
+    let nuevaInfo = "Soy miembro vip";
+    dgestor.perfil.editInfo(idu, nuevaInfo, (resp) =>{
+    if(resp) {
+    		message.channel.send('Tu información de perfil fue editado correctamente.');
+    	}
+    });
+  }
+////////////////////////////////////////////////////////////////////
+
+if(command === 'titulo'){
+  const dgestor = require('discord-gestor');
+  let idu = message.author.id;
+
+    let nuevoTitulo = "programador";
+    dgestor.perfil.editTitulo(idu, nuevoTitulo , (resp) => {
+    if(resp) {
+    		console.log('El titulo de perfil fue editado correctamente.');;
+    	}
+    });
+  }
+////////////////////////////////////////////////////////////////////
+
+if(command === 'monedas'){
+dgestor.economia.verMonedas(idu, (monedas) => {
+    console.log('Tienes: '+ monedas.cantidad +' monedas.');
+
+});
+  }
+
+//////////////////////////////////////////////////////////////////
+if(command === 'monedas'){
+let idu = message.author.id;
+    const dgestor = require('discord-gestor');
+  let inventario = 'roles vips';
+dgestor.economia.verInventario(idu, inventario, (item) => {
+  if(item) {
+
+        message.channel.send('Nombre: '+ item.nombre +' cantidad: '+ item.cantidad);
+
+    } else {
+        message.channel.send('No tienes ningun item en tu inventario.');
+    }
+
+})
+}
+////////////////////////////////////////////////////////
+if(command === '60'){
+let inventario = 'roles vips';
+const dgestor = require('discord-gestor');
+let idu = message.author.id;
+
+dgestor.economia.verInventario(idu, inventario, (item) => {
+    if(item) {
+
+        console.log('Nombre: '+ item.nombre +' cantidad: '+ item.cantidad);
+
+    } else {
+        console.log('No tienes ningun item en tu inventario.');
+    }
+
+})
+}
+//////////////////////////////////////////////////////////////////////
+client.login(config.token);
+
+});
